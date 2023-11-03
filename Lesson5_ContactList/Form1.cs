@@ -2,21 +2,6 @@
 
 namespace Lesson5_ContactList
 {
-
-    //    Создайте Windows Forms приложение для ведения списка контактов,
-    //    где каждый контакт будет представлен в виде панели с использованием
-    //    TableLayoutPanel.Это приложение позволит пользователям добавлять,
-    //    редактировать и удалять контакты, а также отображать информацию о контактах.
-
-    //    Реализовать пункты:
-    //      1) Реализуйте функциональность для редактирования и добавления контактов.
-    //    При выборе контакта на панели, пользователь сможет редактировать его информацию
-    //    и сохранить изменения.
-    //      2) Добавьте кнопку "Удалить", чтобы пользователь мог удалять контакты из списка.
-    //      3) Используйте TableLayoutPanel для отображения информации о каждом контакте.Каждая
-    //    панель будет содержать информацию об одном контакте, и они будут располагаться в виде сетки.
-    //      4) Используйте Panel, для отображения формы редактирования и добавления контакта.
-
     public partial class ContactListForm : Form
     {
         Dictionary<Guid, Contact> contacts = new Dictionary<Guid, Contact>();
@@ -30,24 +15,25 @@ namespace Lesson5_ContactList
         private void addNewContactButton_Click(object sender, EventArgs e)
         {
             EditContactForm editContactForm = new EditContactForm();
+            editContactForm.Owner = this;
             editContactForm.Location = new Point(this.Left, this.Top);
 
-            editContactForm.ContactAdded += (s, contact) =>
-            {
-
-                Panel panel = new Panel();
-                Button accessButton = new Button();
-
-                Guid key = Guid.NewGuid();
-                contacts.Add(key, contact);
-
-                AddLabels(panel, contact);
-                AddAccessButton(panel, accessButton, key);
-
-                AddPanel(this, panel);
-            };
+            editContactForm.ContactUpdated += AddContact;
 
             editContactForm.ShowDialog();
+        }
+        private void AddContact(object sender, Contact contact)
+        {
+            Panel panel = new Panel();
+            Button accessButton = new Button();
+
+            Guid key = Guid.NewGuid();
+            contacts.Add(key, contact);
+
+            AddLabels(panel, contact);
+            AddAccessButton(panel, accessButton, key);
+
+            AddPanel(this, panel);
         }
 
         private void AddPanel(ContactListForm contactListForm, Panel panel)
@@ -77,6 +63,7 @@ namespace Lesson5_ContactList
 
             accessButton.Tag = key;
 
+            panel.Tag = accessButton.Tag;
             panel.Controls.Add(accessButton);
         }
 
@@ -105,10 +92,48 @@ namespace Lesson5_ContactList
             {
                 if (contacts.TryGetValue(key, out Contact contact))
                 {
-                    ViewContactForm viewContactForm = new ViewContactForm(contact);
+                    ViewContactForm viewContactForm = new ViewContactForm(contact, key);
+                    viewContactForm.Owner = this;
                     viewContactForm.Location = new Point(this.Left, this.Top);
                     viewContactForm.ShowDialog();
                 }
+            }
+        }
+        public void DeleteContact(Guid key)
+        {
+            if (contacts.TryGetValue(key, out Contact contact))
+            {
+                foreach (Control control in this.Controls)
+                {
+                    if (control is Panel panel &&
+                        panel.Tag is Guid tagKey &&
+                        tagKey == key)
+                    {
+                        foreach (Control panelControl in panel.Controls)
+                        {
+                            panel.Controls.Remove(panelControl);
+                            panelControl.Dispose();
+                        }
+
+                        this.Controls.Remove(panel);
+                        contacts.Remove(key);
+                        break;
+                    }
+                }
+            }
+        }
+        public void EditContact(Guid key)
+        {
+            if (contacts.TryGetValue(key, out Contact contact))
+            {
+                EditContactForm editContactForm = new EditContactForm();
+                editContactForm.Owner = this;
+                editContactForm.Location = new Point(this.Left, this.Top);
+
+                DeleteContact(key);
+                editContactForm.ContactUpdated += AddContact;
+
+                editContactForm.ShowDialog();
             }
         }
     }

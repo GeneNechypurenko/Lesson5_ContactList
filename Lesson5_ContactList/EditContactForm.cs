@@ -12,9 +12,7 @@ namespace Lesson5_ContactList
 {
     public partial class EditContactForm : Form
     {
-        public delegate void ContactAddedEventHandler(object sender, Contact contact);
-        public event ContactAddedEventHandler ContactAdded;
-
+        public event ContactAddedEventHandler ContactUpdated;
         public EditContactForm()
         {
             InitializeComponent();
@@ -28,19 +26,20 @@ namespace Lesson5_ContactList
                 contact.Name = nameTextBox.Text;
                 contact.Email = emailTextBox.Text;
 
-                ContactAdded?.Invoke(this, contact);
+                ContactUpdated?.Invoke(this, contact);
 
                 this.Close();
             }
             else
             {
-                MessageBox.Show("You must complete information about your contact", "An Error Occured...", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show
+
+                    ("You must complete information\nabout your contact",
+                    "An Error Occured",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
-
-        private void cancelButton_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+        private void cancelButton_Click(object sender, EventArgs e) => this.Close();
     }
 }
