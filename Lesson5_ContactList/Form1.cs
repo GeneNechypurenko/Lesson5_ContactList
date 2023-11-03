@@ -19,60 +19,97 @@ namespace Lesson5_ContactList
 
     public partial class ContactListForm : Form
     {
+        Dictionary<Guid, Contact> contacts = new Dictionary<Guid, Contact>();
         public ContactListForm()
         {
+            this.Left = 1524;
+            this.Top = 0;
             InitializeComponent();
         }
 
         private void addNewContactButton_Click(object sender, EventArgs e)
         {
             EditContactForm editContactForm = new EditContactForm();
+            editContactForm.Location = new Point(this.Left, this.Top);
 
             editContactForm.ContactAdded += (s, contact) =>
             {
-                Label nameLabel = new Label();
-                Label emailLabel = new Label();
+
                 Panel panel = new Panel();
                 Button accessButton = new Button();
 
-                nameLabel.AutoSize = true;
-                nameLabel.Text = contact.Name;
-                nameLabel.Location = new Point(91, 6);
-                nameLabel.ForeColor = Color.Coral;
-                panel.Controls.Add(nameLabel);
+                Guid key = Guid.NewGuid();
+                contacts.Add(key, contact);
 
-                emailLabel.AutoSize = true;
-                emailLabel.ForeColor = Color.White;
-                emailLabel.Text = contact.Email;
-                emailLabel.Location = new Point(91, 30);
-                panel.Controls.Add(emailLabel);
+                AddLabels(panel, contact);
+                AddAccessButton(panel, accessButton, key);
 
-                accessButton.Height = 60;
-                accessButton.Width = 60;
-                accessButton.Text = "✒";
-                accessButton.Font = new Font(accessButton.Font.FontFamily, 24);
-                accessButton.BackColor = Color.FromArgb(64, 64, 64);
-                accessButton.ForeColor = Color.Coral;
-                accessButton.FlatStyle = FlatStyle.Popup;
-                panel.Controls.Add(accessButton);
-                accessButton.Dock = DockStyle.Left;
-                accessButton.Click += AccessButton_Click;
-
-                panel.Height = 60;
-                panel.BorderStyle = BorderStyle.FixedSingle;
-                panel.Dock = DockStyle.Top;
-
-                this.Controls.Add(panel);
+                AddPanel(this, panel);
             };
 
-            editContactForm.Show();
+            editContactForm.ShowDialog();
+        }
+
+        private void AddPanel(ContactListForm contactListForm, Panel panel)
+        {
+            panel.Height = 60;
+            panel.BorderStyle = BorderStyle.FixedSingle;
+            panel.Dock = DockStyle.Top;
+
+            this.Controls.Add(panel);
+        }
+
+        private void AddAccessButton(Panel panel, Button accessButton, Guid key)
+        {
+            accessButton.Height = 60;
+            accessButton.Width = 60;
+
+            accessButton.Text = "✒";
+            accessButton.Font = new Font(accessButton.Font.FontFamily, 24);
+
+            accessButton.BackColor = Color.FromArgb(64, 64, 64);
+            accessButton.ForeColor = Color.Coral;
+
+            accessButton.FlatStyle = FlatStyle.Popup;
+            accessButton.Dock = DockStyle.Left;
+
+            accessButton.Click += AccessButton_Click;
+
+            accessButton.Tag = key;
+
+            panel.Controls.Add(accessButton);
+        }
+
+        private void AddLabels(Panel panel, Contact contact)
+        {
+            Label nameLabel = new Label();
+            nameLabel.AutoSize = true;
+            nameLabel.Text = contact.Name;
+            nameLabel.Location = new Point(91, 6);
+            nameLabel.ForeColor = Color.Coral;
+
+            panel.Controls.Add(nameLabel);
+
+            Label emailLabel = new Label();
+            emailLabel.AutoSize = true;
+            emailLabel.ForeColor = Color.White;
+            emailLabel.Text = contact.Email;
+            emailLabel.Location = new Point(91, 30);
+
+            panel.Controls.Add(emailLabel);
         }
 
         private void AccessButton_Click(object? sender, EventArgs e)
         {
-            ViewContactForm viewContactForm = new ViewContactForm();
-
-            viewContactForm.Show();
+            if (sender is Button accessButton && accessButton.Tag is Guid key)
+            {
+                if (contacts.TryGetValue(key, out Contact contact))
+                {
+                    ViewContactForm viewContactForm = new ViewContactForm(contact);
+                    viewContactForm.Location = new Point(this.Left, this.Top);
+                    viewContactForm.ShowDialog();
+                }
+            }
         }
     }
 }

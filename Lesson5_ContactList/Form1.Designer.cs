@@ -52,7 +52,7 @@
             // 
             panel1.Controls.Add(addNewContactButton);
             panel1.Dock = DockStyle.Bottom;
-            panel1.Location = new Point(0, 638);
+            panel1.Location = new Point(0, 1079);
             panel1.Name = "panel1";
             panel1.Size = new Size(382, 30);
             panel1.TabIndex = 1;
@@ -62,11 +62,12 @@
             AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(64, 64, 64);
-            ClientSize = new Size(382, 668);
+            ClientSize = new Size(382, 1109);
             Controls.Add(panel1);
             FormBorderStyle = FormBorderStyle.Fixed3D;
             MaximizeBox = false;
             Name = "ContactListForm";
+            StartPosition = FormStartPosition.Manual;
             Text = "Contact List";
             panel1.ResumeLayout(false);
             panel1.PerformLayout();

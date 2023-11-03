@@ -51,7 +51,7 @@
             // cancelButton
             // 
             cancelButton.BackColor = Color.Red;
-            cancelButton.Dock = DockStyle.Left;
+            cancelButton.Dock = DockStyle.Right;
             cancelButton.FlatStyle = FlatStyle.Popup;
             cancelButton.ForeColor = Color.White;
             cancelButton.Location = new Point(191, 0);
@@ -60,6 +60,7 @@
             cancelButton.TabIndex = 1;
             cancelButton.Text = "✖";
             cancelButton.UseVisualStyleBackColor = false;
+            cancelButton.Click += cancelButton_Click;
             // 
             // acceptButton
             // 
@@ -80,7 +81,7 @@
             emailLabel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             emailLabel.AutoSize = true;
             emailLabel.ForeColor = Color.Coral;
-            emailLabel.Location = new Point(101, 72);
+            emailLabel.Location = new Point(91, 60);
             emailLabel.Name = "emailLabel";
             emailLabel.Size = new Size(55, 20);
             emailLabel.TabIndex = 4;
@@ -91,7 +92,7 @@
             nameLabel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             nameLabel.AutoSize = true;
             nameLabel.ForeColor = Color.Coral;
-            nameLabel.Location = new Point(101, 39);
+            nameLabel.Location = new Point(91, 30);
             nameLabel.Name = "nameLabel";
             nameLabel.Size = new Size(56, 20);
             nameLabel.TabIndex = 3;
@@ -102,7 +103,7 @@
             nameTextBox.BackColor = Color.FromArgb(64, 64, 64);
             nameTextBox.BorderStyle = BorderStyle.FixedSingle;
             nameTextBox.ForeColor = Color.Coral;
-            nameTextBox.Location = new Point(157, 36);
+            nameTextBox.Location = new Point(150, 30);
             nameTextBox.Name = "nameTextBox";
             nameTextBox.Size = new Size(192, 27);
             nameTextBox.TabIndex = 5;
@@ -112,7 +113,7 @@
             emailTextBox.BackColor = Color.FromArgb(64, 64, 64);
             emailTextBox.BorderStyle = BorderStyle.FixedSingle;
             emailTextBox.ForeColor = Color.Coral;
-            emailTextBox.Location = new Point(157, 69);
+            emailTextBox.Location = new Point(150, 60);
             emailTextBox.Name = "emailTextBox";
             emailTextBox.Size = new Size(192, 27);
             emailTextBox.TabIndex = 6;
@@ -131,6 +132,7 @@
             FormBorderStyle = FormBorderStyle.Fixed3D;
             MaximizeBox = false;
             Name = "EditContactForm";
+            StartPosition = FormStartPosition.Manual;
             Text = "Edit Contact";
             panel1.ResumeLayout(false);
             ResumeLayout(false);
