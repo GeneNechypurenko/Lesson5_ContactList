@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lesson5_ContactList
 {
-    public class Contact
+    public struct Contact
     {
         public string Name { get; set; }
         public string Email { get; set; }

@@ -12,7 +12,7 @@ namespace Lesson5_ContactList
 {
     public partial class EditContactForm : Form
     {
-        public event ContactAddedEventHandler ContactUpdated;
+        public event EditContactEventHandler ContactUpdated;
         public EditContactForm()
         {
             InitializeComponent();

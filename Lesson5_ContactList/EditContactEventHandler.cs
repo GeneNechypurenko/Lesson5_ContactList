@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Lesson5_ContactList
 {
-    public delegate void ContactAddedEventHandler(object sender, Contact contact);
+    public delegate void EditContactEventHandler(object sender, Contact contact);
 }
